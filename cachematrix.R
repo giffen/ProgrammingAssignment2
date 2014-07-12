@@ -1,16 +1,37 @@
-## Put comments here that give an overall description of what your
-## functions do
+## 2 functions that store a matrix and it's inverse in order to speed up efficiency, only solving
+## a matrix when it hasn't already been solved.
 
-## Write a short comment describing this function
-## test push
+## makeCacheMatrix: function takes in a matrix (x) and stores the solved inverse of the matrix
+## if it's been solved once, otherwise stores the inverse as NULL
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  inv <- NULL
+  set <- function(y) {
+    x <<- y
+    inv <<- NULL
+  }
+  get <- function() x
+  setinverse <- function(inverse) inv <<- inverse
+  getinverse <- function() inv
+  list(set = set, get = get,
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
-## Write a short comment describing this function
+## cacheSolve: takes an object of of type makeCacheMatrix and returns the inverse of that
+## matrix (x).  The function checks to see if the inverse is cached in passed object before
+## solving the matrix using the solve function.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inv <- x$getinverse()
+  if(!is.null(inv)) {
+    message("getting cached data")
+    return(inv)
+  }
+  data <- x$get()
+  inv <- solve(data, ...)
+  x$setinverse(inv)
+  inv ## Returns a matrix that is the inverse of 'x'
+  
 }
